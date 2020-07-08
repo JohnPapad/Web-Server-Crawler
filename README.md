@@ -163,10 +163,24 @@ Furthermore, at the *command port*, the server listens and accepts the following
 
 ## Web-Crawler
 
+The crawler's job is to download all the websites' webpages from the webserver, analyzing them and finding links within the pages that will follow retrospectively.
+
 To run the application use the command:   
 ```$ ./mycrawler -­h <host_or_IP> -­p <port> -­c <command_port> -­t <num_of_threads> -­d <save_dir> <starting_URL>``` 
 
-The crawler's job is to download all the websites' webpages from the webserver, analyzing them and finding links within the pages that will follow retrospectively.
+**The crawler works as follows:**   
+In the beginning, it creates a thread pool with the corresponding threads. The threads are being reused.
+It also creates a queue in order to store the links that have been found so far and appends the *starting_URL* to this queue.   
+
+One of the threads takes the URL from the queue and requests it from the server. The URL is in the format of (for example) ```http://linux01.di.uoa.gr:8080/site1/page0_1234.html```.   
+
+After downloading the file, it saves it to the corresponding directory/file in the *save_dir*.   
+
+It analyzes the file, that has just been downloaded, and finds additional links that appends to the queue.   
+
+It repeats this process with all the threads in parallel, until there are no other links
+in the queue.
+
 
 ### Command line arguments
  
